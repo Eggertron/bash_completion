@@ -1,0 +1,16 @@
+_ssh() 
+{
+    # if the previous word is not ssh (the command) then exit.
+    if [ "$1" != "$3" ]
+    then
+        return
+    fi
+
+    # create list of words with space delimiter
+    list=$(grep '^Host' ~/.ssh/config ~/.ssh/config.d/* 2>/dev/null | grep -v '[?*]' | cut -d ' ' -f 2-)
+    COMPREPLY=( $(compgen -W "$list" -- $2) )
+
+    return 0
+}
+# apply _ssh function to the ssh command
+complete -F _ssh ssh
